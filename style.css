@@ -1,0 +1,118 @@
+:root {
+  --max-width: 1000px;
+  --dark-color: #222;
+  --grey-color: #ddd;
+  --light-color: #fff;
+}
+
+* {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--light-color);
+  color: var(--dark-color);
+  font-size: larger;
+}
+
+h1 {
+  max-width: var(--max-width);
+  margin: 1em auto;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+#todo-list {
+  max-width: var(--max-width);
+  margin: 1em auto;
+  border: 1px solid var(--dark-color);
+  border-radius: 1em;
+  padding: 1em;
+  list-style: none;
+}
+
+.todo {
+  margin: 0.5em;
+  border: 1px solid var(--dark-color);
+  border-radius: 1em;
+  padding: 1em;
+  display: flex;
+  gap: 1em;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.done {
+  background-color: var(--grey-color);
+  animation-duration: 0.5s;
+  animation-name: complete;
+  animation-timing-function: ease;
+  animation-direction: normal;
+}
+
+.done .todo-label {
+  text-decoration: line-through;
+}
+
+@keyframes complete {
+  0% {
+    background-color: var(--light-color);
+    transform: scale(100%);
+  }
+
+  50% {
+    transform: scale(95%);
+  }
+
+  100% {
+    background-color: var(--grey-color);
+    transform: scale(100%);
+  }
+}
+
+.delete-button {
+  width: 1.5em;
+  height: 1.5em;
+  flex: 0 0 1.5em;
+  border: 1px solid var(--dark-color);
+  border-radius: 50%;
+  font-size: inherit;
+  background-color: var(--dark-color);
+  color: var(--light-color);
+}
+
+#new-todo-form {
+  max-width: 30em;
+  height: 3.2em;
+  margin: 1em auto;
+  padding: 0.5em;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  gap: 0.5em;
+}
+
+#add-todo-button {
+  padding: 0 1em;
+  background-color: var(--dark-color);
+  color: white;
+  font-size: inherit;
+  font-family: inherit;
+  border: 1px solid var(--dark-color);
+  border-radius: 1em;
+  height: 100%;
+  box-shadow: none;
+}
+
+#new-todo-input {
+  border: 1px solid var(--dark-color);
+  border-radius: 1em;
+  padding: 0 1em;
+  flex: 1 1 10em;
+  height: 100%;
+  font-size: inherit;
+  font-family: inherit;
+}
