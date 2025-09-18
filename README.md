@@ -1,8 +1,8 @@
 # vanilla-js-todo-app
 
-This is an client-side todo app coded in vanilla JavaScript, HTML and CSS.
+This is a client-side todo app coded in vanilla JavaScript, HTML and CSS.
 
-The app uses localStorage to save the todos the user adds to their list.
+The app uses localStorage to save todos the user adds to their list.
 
 Todos can be added, marked as done and removed, and will persist after the page is refreshed or closed.
 
