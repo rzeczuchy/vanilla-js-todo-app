@@ -3,6 +3,7 @@
   --dark-color: #222;
   --grey-color: #ddd;
   --light-color: #fff;
+  --input-height: 2em;
 }
 
 * {
@@ -86,7 +87,7 @@ h1 {
 
 #new-todo-form {
   max-width: 30em;
-  height: 3.2em;
+  height: var(--input-height);
   margin: 1em auto;
   padding: 0.5em;
   display: flex;
@@ -95,7 +96,7 @@ h1 {
   gap: 0.5em;
 }
 
-#add-todo-button {
+.button {
   padding: 0 1em;
   background-color: var(--dark-color);
   color: white;
@@ -103,7 +104,7 @@ h1 {
   font-family: inherit;
   border: 1px solid var(--dark-color);
   border-radius: 1em;
-  height: 100%;
+  height: var(--input-height);
   box-shadow: none;
 }
 
@@ -112,7 +113,23 @@ h1 {
   border-radius: 1em;
   padding: 0 1em;
   flex: 1 1 10em;
-  height: 100%;
+  height: var(--input-height);
   font-size: inherit;
   font-family: inherit;
+}
+
+.modal {
+  border: 1px solid var(--dark-color);
+  border-radius: 1em;
+  padding: 0 1em;
+  max-width: 30em;
+  position: absolute;
+  left: 50vw;
+  top: 50vh;
+  translate: -50% -50%;
+  text-align: center;
+}
+
+.modal h2, .modal p, .modal button {
+  margin: 0.5em auto;
 }

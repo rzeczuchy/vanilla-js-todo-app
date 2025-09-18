@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./style.css" />
     <title>Vanilla JS todo</title>
   </head>
   <body>
@@ -11,11 +11,20 @@
       <h1>Todo list</h1>
       <ul id="todo-list"></ul>
       <form id="new-todo-form">
-        <label for="new-todo">New todo:</label>
+        <label for="new-todo-input">New todo:</label>
         <input id="new-todo-input" type="text" name="new-todo" />
-        <input id="add-todo-button" type="button" value="Add" />
+        <input id="add-todo-button" type="button" class="button" value="Add" />
       </form>
     </main>
+    <dialog id="storage-info-modal" class="modal">
+      <h2>Hello! :&rpar;</h2>
+      <p>
+        This app uses local storage to save your todos, even after you leave or
+        refresh this page.
+      </p>
+      <p>Clearing the site data will clear your todo list.</p>
+      <button id="close-storage-info-modal" class="button">Got it!</button>
+    </dialog>
     <script src="./app.js"></script>
   </body>
 </html>

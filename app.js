@@ -10,17 +10,23 @@ class Todo {
   }
 }
 
-let todoList = [
+let initialTodos = [
   new Todo("I am an example todo"),
   new Todo("You can click on me to mark me as done"),
   new Todo("I am already done - click me again to mark me as active", true),
 ];
 
-let addTodoButton = document.querySelector("#add-todo-button");
+const addTodoButton = document.querySelector("#add-todo-button");
 
-let newTodoInput = document.querySelector("#new-todo-input");
+const newTodoInput = document.querySelector("#new-todo-input");
 
-let todoListElement = document.querySelector("#todo-list");
+const todoList = document.querySelector("#todo-list");
+
+const storageInfoModal = document.querySelector("#storage-info-modal");
+
+const closeStorageInfoModalButton = document.querySelector(
+  "#close-storage-info-modal"
+);
 
 function todoOnClick(todo) {
   if (todo.classList.contains("done")) {
@@ -28,12 +34,16 @@ function todoOnClick(todo) {
   } else {
     todo.classList.add("done");
   }
+
+  updateToDoListInStorage();
 }
 
 function deleteTodo(source) {
   const todo = source.parentElement;
 
   todo.remove();
+
+  updateToDoListInStorage();
 }
 
 function addTodo(name, done = false) {
@@ -63,11 +73,45 @@ function addTodo(name, done = false) {
   };
 
   newTodo.appendChild(deleteButton);
-  todoListElement.appendChild(newTodo);
+  todoList.appendChild(newTodo);
+
+  updateToDoListInStorage();
 }
 
-function populateListElement() {
-  todoList.forEach((element) => {
+function localStorageEmpty() {
+  const todo0 = localStorage.getItem("todo0");
+  console.log(todo0);
+
+  return todo0 == null;
+}
+
+function populateInitialTodosFromLocalStorage() {
+  initialTodos = [];
+  let iterating = true;
+  let i = 0;
+
+  while (iterating) {
+    const todoAtIndex = localStorage.getItem(`todo${i}`);
+
+    if (todoAtIndex === null) {
+      iterating = false;
+      return;
+    } else {
+      const todoName = todoAtIndex.substring(0, todoAtIndex.lastIndexOf(" "));
+      const doneString = todoAtIndex.split(" ").pop();
+      let done = doneString === "true";
+
+      initialTodos.push(new Todo(todoName, done));
+      i++;
+    }
+  }
+}
+
+function populateTodoListElement() {
+  if (!localStorageEmpty()) {
+    populateInitialTodosFromLocalStorage();
+  }
+  initialTodos.forEach((element) => {
     addTodo(element.name, element.done);
   });
 }
@@ -81,6 +125,9 @@ function submitNewTodo() {
 }
 
 addTodoButton.onclick = (e) => {
+  if (newTodoInput.value === "") {
+    return;
+  }
   submitNewTodo();
 };
 
@@ -92,4 +139,28 @@ newTodoInput.addEventListener("keydown", (e) => {
   }
 });
 
-populateListElement();
+function updateToDoListInStorage() {
+  localStorage.clear();
+
+  const todoElementsCollection = todoList.children;
+  const todoArray = Array.from(todoElementsCollection);
+
+  todoArray.forEach((element, index) => {
+    const todoName = element.firstChild.innerText;
+    let todoDone = "false";
+    const indexString = index.toString();
+
+    if (element.classList.contains("done")) {
+      todoDone = "true";
+    }
+
+    localStorage.setItem(`todo${indexString}`, `${todoName} ${todoDone}`);
+  });
+}
+
+closeStorageInfoModalButton.onclick = (e) => {
+  storageInfoModal.close();
+};
+
+populateTodoListElement();
+storageInfoModal.showModal();

@@ -1,7 +1,9 @@
 # vanilla-js-todo-app
 
-Vanilla JavaScript todo app frontend.
+This is an example todo app coded in vanilla JavaScript.
 
-Originally coded in Codepen with a time limit: <https://codepen.io/rzeczuchy/pen/LEpwgEr>
+The app uses the `localStorage` property to save the todos the user adds to their list.
 
-Uploaded to GitHub for archiving and to make updates in VS Code in the future.
+Todos can be added, marked as done and removed, and will persist after the page is refreshed or closed.
+
+Clearing the site data will clear the todo list.
