@@ -123,7 +123,7 @@ function createTodoFromLocalStorageString(localStorageString) {
 
   const doneString = localStorageString.split(" ").pop();
 
-  let done = doneString === "true";
+  let done = JSON.parse(doneString.toLowerCase());
 
   return new Todo(todoName, done);
 }
@@ -163,17 +163,12 @@ newTodoInput.addEventListener("keydown", (e) => {
 function updateToDoListInStorage() {
   localStorage.clear();
 
-  const todoElementsCollection = todoList.children;
-  const todoArray = Array.from(todoElementsCollection);
+  const todoArray = Array.from(todoList.children);
 
   todoArray.forEach((element, index) => {
     const todoName = element.firstChild.innerText;
-    let todoDone = "false";
+    const todoDone = element.classList.contains("done").toString();
     const indexString = index.toString();
-
-    if (element.classList.contains("done")) {
-      todoDone = "true";
-    }
 
     localStorage.setItem(`todo${indexString}`, `${todoName} ${todoDone}`);
   });
@@ -183,5 +178,9 @@ closeStorageInfoModalButton.onclick = (e) => {
   storageInfoModal.close();
 };
 
-populateTodoListElement();
-storageInfoModal.showModal();
+function init() {
+  populateTodoListElement();
+  storageInfoModal.showModal();
+}
+
+init();
