@@ -1,14 +1,4 @@
-"use strict";
-
-class Todo {
-  constructor(name, done = false) {
-    this.name = name;
-    this.done = done;
-  }
-  onClick() {
-    this.done = !this.done;
-  }
-}
+import Todo from "./todo.js";
 
 let initialTodos = [
   new Todo("I am an example todo"),
@@ -51,6 +41,22 @@ function addTodo(name, done = false) {
     return;
   }
 
+  const newTodo = createNewTodo(done);
+
+  const todoLabel = createNewTodoLabel(name);
+
+  newTodo.appendChild(todoLabel);
+
+  const deleteButton = createNewTodoDeleteButton();
+
+  newTodo.appendChild(deleteButton);
+
+  todoList.appendChild(newTodo);
+
+  updateToDoListInStorage();
+}
+
+function createNewTodo(done) {
   const newTodo = document.createElement("li");
   newTodo.classList.add("todo");
   newTodo.onclick = (e) => {
@@ -59,28 +65,28 @@ function addTodo(name, done = false) {
   if (done) {
     newTodo.classList.add("done");
   }
+  return newTodo;
+}
 
+function createNewTodoLabel(name) {
   const todoLabel = document.createElement("p");
   todoLabel.textContent = name;
   todoLabel.classList.add("todo-label");
-  newTodo.appendChild(todoLabel);
+  return todoLabel;
+}
 
+function createNewTodoDeleteButton() {
   const deleteButton = document.createElement("button");
   deleteButton.textContent = "✖";
   deleteButton.classList.add("delete-button");
   deleteButton.onclick = (e) => {
     deleteTodo(deleteButton);
   };
-
-  newTodo.appendChild(deleteButton);
-  todoList.appendChild(newTodo);
-
-  updateToDoListInStorage();
+  return deleteButton;
 }
 
 function localStorageEmpty() {
   const todo0 = localStorage.getItem("todo0");
-  console.log(todo0);
 
   return todo0 == null;
 }
@@ -91,20 +97,35 @@ function populateInitialTodosFromLocalStorage() {
   let i = 0;
 
   while (iterating) {
-    const todoAtIndex = localStorage.getItem(`todo${i}`);
+    const localStorageString = localStorage.getItem(`todo${i}`);
 
-    if (todoAtIndex === null) {
+    if (localStorageString === null) {
       iterating = false;
       return;
-    } else {
-      const todoName = todoAtIndex.substring(0, todoAtIndex.lastIndexOf(" "));
-      const doneString = todoAtIndex.split(" ").pop();
-      let done = doneString === "true";
-
-      initialTodos.push(new Todo(todoName, done));
-      i++;
     }
+
+    const newTodo = createTodoFromLocalStorageString(localStorageString);
+
+    initialTodos.push(newTodo);
+    i++;
   }
+}
+
+function createTodoFromLocalStorageString(localStorageString) {
+  if (localStorageString === null) {
+    throw new TypeError("localStorageString should not be a null");
+  }
+
+  const todoName = localStorageString.substring(
+    0,
+    localStorageString.lastIndexOf(" ")
+  );
+
+  const doneString = localStorageString.split(" ").pop();
+
+  let done = doneString === "true";
+
+  return new Todo(todoName, done);
 }
 
 function populateTodoListElement() {
