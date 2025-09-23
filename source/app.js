@@ -123,7 +123,7 @@ function createTodoFromLocalStorageString(localStorageString) {
 
   const doneString = localStorageString.split(" ").pop();
 
-  let done = JSON.parse(doneString.toLowerCase());
+  let done = doneString === "true";
 
   return new Todo(todoName, done);
 }
