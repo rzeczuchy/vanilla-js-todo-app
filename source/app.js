@@ -1,4 +1,7 @@
 import Todo from "./todo.js";
+import LocalStorageHandler from "./localStorageHandler.js";
+
+const localStorageHandler = new LocalStorageHandler();
 
 let initialTodos = [
   new Todo("I am an example todo"),
@@ -25,7 +28,7 @@ function todoOnClick(todo) {
     todo.classList.add("done");
   }
 
-  updateToDoListInStorage();
+  localStorageHandler.updateLocalStorage(todoList);
 }
 
 function deleteTodo(source) {
@@ -33,7 +36,7 @@ function deleteTodo(source) {
 
   todo.remove();
 
-  updateToDoListInStorage();
+  localStorageHandler.updateLocalStorage(todoList);
 }
 
 function addTodo(name, done = false) {
@@ -53,7 +56,7 @@ function addTodo(name, done = false) {
 
   todoList.appendChild(newTodo);
 
-  updateToDoListInStorage();
+  localStorageHandler.updateLocalStorage(todoList);
 }
 
 function createNewTodo(done) {
@@ -85,52 +88,9 @@ function createNewTodoDeleteButton() {
   return deleteButton;
 }
 
-function localStorageEmpty() {
-  const todo0 = localStorage.getItem("todo0");
-
-  return todo0 == null;
-}
-
-function populateInitialTodosFromLocalStorage() {
-  initialTodos = [];
-  let iterating = true;
-  let i = 0;
-
-  while (iterating) {
-    const localStorageString = localStorage.getItem(`todo${i}`);
-
-    if (localStorageString === null) {
-      iterating = false;
-      return;
-    }
-
-    const newTodo = createTodoFromLocalStorageString(localStorageString);
-
-    initialTodos.push(newTodo);
-    i++;
-  }
-}
-
-function createTodoFromLocalStorageString(localStorageString) {
-  if (localStorageString === null) {
-    throw new TypeError("localStorageString should not be a null");
-  }
-
-  const todoName = localStorageString.substring(
-    0,
-    localStorageString.lastIndexOf(" ")
-  );
-
-  const doneString = localStorageString.split(" ").pop();
-
-  let done = doneString === "true";
-
-  return new Todo(todoName, done);
-}
-
 function populateTodoListElement() {
-  if (!localStorageEmpty()) {
-    populateInitialTodosFromLocalStorage();
+  if (localStorageHandler.localStorageHasTodos()) {
+    initialTodos = localStorageHandler.getTodosFromLocalStorage();
   }
   initialTodos.forEach((element) => {
     addTodo(element.name, element.done);
@@ -159,20 +119,6 @@ newTodoInput.addEventListener("keydown", (e) => {
     submitNewTodo();
   }
 });
-
-function updateToDoListInStorage() {
-  localStorage.clear();
-
-  const todoArray = Array.from(todoList.children);
-
-  todoArray.forEach((element, index) => {
-    const todoName = element.firstChild.innerText;
-    const todoDone = element.classList.contains("done").toString();
-    const indexString = index.toString();
-
-    localStorage.setItem(`todo${indexString}`, `${todoName} ${todoDone}`);
-  });
-}
 
 closeStorageInfoModalButton.onclick = (e) => {
   storageInfoModal.close();
